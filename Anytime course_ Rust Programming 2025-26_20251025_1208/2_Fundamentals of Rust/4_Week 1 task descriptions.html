@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+    <title>4_Week 1 task descriptions</title>
+    <meta charset="utf-8">
+    
+</head>
+<body>
+<p dir="ltr" style="text-align: left;"></p><h3><br></h3>
+<h3>Task 1</h3>Create a new project with cargo, for example:<pre>cargo new exercise_1</pre>In the created project, print a greeting to the user in the main.rs file.<br><br>Esimerkkiajo:<br>
+<pre>Hey, Rust!</pre>
+<p><br></p><br>
+<h3>Tehtävä 2</h3>Create two immutable strings that store the values ​​"Rust" and "No".<br><br>Ask the user for input. If the user's input is Rust, the program prints Example run 1 statement.<br><br>If the input is "No", the program prints according to Example run 2.<br><br>Otherwise, print the user's value in the print statement, according to example run 3.<br><br>Use a formatted print statement with variables to print the values ​​of the variables.<p><br></p>
+<p>Example runs:</p>
+<p>Example run - Rust:<br></p>
+<pre>So you appreciate Rust? That's great! Thank you!<br><br></pre>Example run - No:<br>
+<pre>So you like nothing? Alright then... :)<br><br></pre>
+<p>Example run your_own_value:</p>
+<pre>It seems that you like your_own_value.</pre>
+<p><br></p>
+<p></p>
+<h3>Task 3</h3>Using loops, asking the user for input and using if statements, make a program that adds numbers to the i16 size value according to the user's input until the number is larger than i16 can store. Use i32 for the calculation, but when the value exceeds the maximum value that i16 could hold, stop the program. If the user input is 0, exit the program. If the given value is lower than 0, give an error message to the user and continue the program.<br><br>Bolded and italicized sections are inputs given by the user.<br>Example run:<pre>By how much do you want to increment the number?<br>Current: 0. Increment by: <br><strong><em>9999</em></strong><br>Current: 9999. Increment by: <br><em><strong>9999</strong></em><br>Current: 19998. Increment by: <br><strong><em>9999</em></strong><br>Current: 29997. Increment by: <br><strong><em>9999</em></strong><br>Enough incrementations.<br></pre>
+<p><br></p>
+<p></p>
+<h3>Task 4</h3>Make a function called receive_random() that generates random numbers 1-10.<br><br>Make a function called measure_luck() that takes the value of i32 as a parameter and returns a string. If the value of the parameter is greater than 3, return a String telling the user that he was unlucky. Otherwise, tell him he was lucky.<br><br>In the main function, make a loop, at the beginning of which add 1 to the counter variable. Generate a random number through the function you made.<br><br>If the generated value is between 1 and 3, print "Low..."<br><br>If the value is between 4 and 6, print "Middle!".<br><br>If the value is between 7 and 9, print High!!".<br><br>If the value is 10, print "Jackpot!!!" and end the loop.<br><br>Otherwise, print "Uncovered".<br><br>Add 1 to its counter variable every round.<br><br>After the loop, test your luck with the measure_luck() function, using the counter variable as a parameter.<p><br></p>
+<p>Example run:</p>
+<pre>Middle!<br>High!! <br>Middle!<br>Low... <br>High!! <br>Low...<br>High!!<br>High!!<br>Jackpot!!!<br>You were UNLUCKY!<br></pre>
+<p><br></p>
+<p></p>
+<h3>Task 5<br></h3>Do a loop where you either attack the main enemy, get a new defense multiplier or use a potion.<br>Until you - the player, or the main enemy is destroyed, the loop continues.<br><br>If you attack the main enemy, use the receive_player_attack_dmg function you created.<br>If you defend yourself, use the receive_defense_multiplier function you created, which will generate a new defense multiplier for you.<br>If you use a potion and improve your life points, use your own function for this as well. Add 25 points to the player if there are still potions left.<br><br>On your turn, do only 1 of the options above. If the main enemy is still alive after your turn, it will attack you and the amount of damage from the attack depends on your defense factor.<br>Before the battle (the main loop of your program), initialize your potion count to 3, the player's life points to 100, the main enemy's life points to 150. Use float numbers for life points.<br><br>Make a function called receive_player_attack_dmg that returns a random number between 12.5 and 20.<br>Make a function called receive_defense_multiplier that generates a random number between 2 and 4, and returns a value that is 1 / generated_random_number - i.e. the returned number is less than 1.<br>Make a function called receive_boss_attack_dmg that returns a random number between 5 and 25.<br><br>To generate random numbers, use rand-crate. Import it in the Cargo.toml file.<br><br>Esimerkkiajo käyttäjän syötteiden kanssa:<br>
+<pre>| Your HP - 100 | Boss HP - 150 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 14.957747 amount of damage.<br>You take 19.060558 damage.<br>| Your HP - 80.93944 | Boss HP - 135.04225 | <br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>2</em></strong><br>Defense activated!<br>You take 4.502411 damage.<br>| Your HP - 76.43703 | Boss HP - 135.04225 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 16.456348 amount of damage.<br>You take 17.453207 damage.<br>| Your HP - 58.983818 | Boss HP - 118.58591 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>3</em></strong><br>You consume a potion.<br>You take 9.422489 damage.<br>| Your HP - 74.561325 | Boss HP - 118.58591 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 17.22312 amount of damage.<br>You take 23.554003 damage.<br>| Your HP - 51.007324 | Boss HP - 101.362785 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 18.885159 amount of damage.<br>You take 16.806934 damage.<br>| Your HP - 34.20039 | Boss HP - 82.47763 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 18.075796 amount of damage.<br>You take 14.347532 damage.<br>| Your HP - 19.852858 | Boss HP - 64.40183 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>3</em></strong><br>You consume a potion.<br>You take 24.755264 damage.<br>| Your HP - 20.097595 | Boss HP - 64.40183 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 18.169785 amount of damage.<br>You take 5.479629 damage.<br>| Your HP - 14.617966 | Boss HP - 46.232048 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 17.021484 amount of damage.<br>You take 19.016312 damage.<br>You have been defeated!</pre>
+<p></p>
+<p></p><br><p></p>
+</body>
+</html>

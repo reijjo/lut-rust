@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <title>2_Viikko 1 tehtäväkuvaukset</title>
+    <meta charset="utf-8">
+    
+</head>
+<body>
+<h3><br></h3>
+<h3>Tehtävä 1</h3>Tee uusi projecti cargon komennolla, esimerkiksi:<br>
+<pre>cargo new exercise_1</pre>Luodussa projektissa, printtaa main.rs tiedostossa käyttäjälle tervehdys.<br><br>Esimerkkiajo:<br>
+<pre>Hey, Rust!</pre>
+<p><br></p><br>
+<h3>Tehtävä 2</h3>
+<p>Luo kaksi immutable merkkijonoa jotka tallettava arvot "Rust" ja "No".</p>
+<p>Kysy käyttäjältä syötettä. Jos käyttäjän syöte on Rust, ohjelma printtaa Esimerkkiajo 1 lauseen.<br></p>
+<p>Jos syöte on "No", ohjelma printtaa Esimerkkiajo 2 mukaisesti.<br></p>
+<p>Muutoin, printtaa käyttäjän arvo print lauseessa, esimerkkiajo 3 mukaisesti.<br></p>
+<p>Käytä formatoitua print-lausetta muuttujien kanssa printataksesi muuttujien arvot.<br></p>
+<p><br></p>
+<p>Esimerkkiajoja:</p>
+<p>Esimerkkiajo Rust:<br></p>
+<pre>So you appreciate Rust? That's great! Thank you!<br><br></pre>Esimerkkiajo No:<br>
+<pre>So you like nothing? Alright then... :)<br><br></pre>
+<p>Esimerkkiajo oma_arvo:</p>
+<pre>It seems that you like oma_arvo.</pre>
+<p><br></p>
+<p></p>
+<h3>Tehtävä 3</h3>
+<p>Käyttäen looppeja, kysyen käyttäjältä syötettä ja käyttäen if-lauseita, tee ohjelma joka lisää i16-kokoiseen arvoon lukuja käyttäjän syötteen mukaan kunnes luku on suurempi kuin i16 voi tallettaa. Käytä i32 lukua laskuun, mutta kun arvo ylittää suurimman arvon mitä i16 voisi pitää, lopeta ohjelma. Jos käyttäjän syöte on 0, lopeta ohjelma. Jos annettu arvo on alempi kuin 0, anna virhekoodi käyttäjälle ja jatka ohjelmaa.</p>
+<p>Boldatut ja kursivoidut osiot on käyttäjän antamia syötteitä.<br></p>
+<p>Esimerkkiajo</p>
+<pre><span>By how much do you want to increment the number?<br>Current: 0. Increment by: <br><strong><em>9999</em></strong><br>Current: 9999. Increment by: <br><em><strong>9999</strong></em><br>Current: 19998. Increment by: <br><strong><em>9999</em></strong><br>Current: 29997. Increment by: <br><strong><em>9999</em></strong><br>Enough incrementations.</span><br></pre>
+<p><br></p>
+<p></p>
+<h3>Tehtävä 4</h3>
+<p>Tee funktio nimeltä receive_random() joka generoi satunnaislukuja 1-10.</p>
+<p>Tee funktio nimeltä measure_luck() joka ottaa i32 arvon parametrinä ja palauttaa stringin. Jos parametrin arvo on yli 3, palauta String kertoen käyttäjälle hänen olleen epäonnekas. Muutoin kerro hänen olleen onnekas.</p>
+<p>Main-funktiossa tee looppi, jonka alussa lisää 1 laskurimuuttujaan. Generoi satunnaisluku tekemäsi funktion kautta.</p>
+<p>Jos generoitu arvo on väliltä 1 ja 3, printtaa "Low..."</p>
+<p>Jos arvo on väliltä 4 ja 6, printtaa "Middle!".</p>
+<p>Jos arvo on väliltä 7 ja 9, printtaa High!!".</p>
+<p>Jos arvo on 10, printtaa "Jackpot!!!" ja lopeta looppi.</p>
+<p>Muutoin, printtaa "Uncovered".</p>
+<p>Lisää laskurimuuttujaan joka kierroksella 1.<br></p>
+<p>Loopin jälkeen testaa onnesi measure_luck() funktion avulla, käyttäen laskuri-muuttujaa parametrina.<br></p>
+<p><br></p>
+<p>Esimerkkiajo:</p>
+<pre>Middle!<br>High!! <br>Middle!<br>Low... <br>High!! <br>Low...<br>High!!<br>High!!<br>Jackpot!!!<br>You were UNLUCKY!<br></pre>
+<p><br></p>
+<p></p>
+<h3>Tehtävä 5<br></h3>Tee looppi, jossa joko hyökkäät pääviholliseen, saat uuden puolustus-monikerran tai käytät potionin (juoman).<br>Kunnes sinä - pelaaja, tai päävihollinen on tuhottu, looppi jatkuu.<br><br>Jos hyökkäät pääviholliseen, käytä luomaasi funktiota receive_player_attack_dmg.<br>Jos puolustat itseäsi, käytä luomaasi funktiota receive_defense_multiplier joka arpoo sinulle uuden puolustuskertoimen.<br>Jos käytät potionin ja parannat elämäpisteitäsi, käytä tähänkin omaa funktiotasi. Lisää 25 pistettä pelaajalle jos potioneita on vielä jäljellä.<br><br>Tee vuorollasi vain 1 ylläolevista vaihtoehdoista. Jos päävihollinen on vuorosi jälkeen vielä elossa, se hyökkää sinuun ja hyökkäyksen vahinkomäärä riippuu puolustuskertoimestasi.<br>Ennen taistelua (ohjelmasi päälooppia) alusta potionimääräsi kolmeen, pelaajan elämäpisteet 100:n, päävihollisen elämäpisteet 150:neen. Käytä float-numeroita elämäpisteille.<br><br>Tee funktio nimeltä receive_player_attack_dmg joka palauttaa satunnaisen luvun 12.5 ja 20 väliltä.<br>Tee funktio nimeltä receive_defense_multiplier joka generoi satunnaisluvun 2 ja 4 väliltä, ja palauttaa arvon joka on 1 / generoitu_satunnaisluku - eli palautettu luku on alle 1.<br>Tee funktio nimeltä receive_boss_attack_dmg joka palauttaa satunnaisen luvun väliltä 5 ja 25.<br><br>Satunnaislukujen generoimiseen käytä rand-cratea. Importtaa se Cargo.toml tiedostossa.<br><br>Esimerkkiajo käyttäjän syötteiden kanssa:<br>
+<pre>| Your HP - 100 | Boss HP - 150 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 14.957747 amount of damage.<br>You take 19.060558 damage.<br>| Your HP - 80.93944 | Boss HP - 135.04225 | <br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>2</em></strong><br>Defense activated!<br>You take 4.502411 damage.<br>| Your HP - 76.43703 | Boss HP - 135.04225 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 16.456348 amount of damage.<br>You take 17.453207 damage.<br>| Your HP - 58.983818 | Boss HP - 118.58591 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>3</em></strong><br>You consume a potion.<br>You take 9.422489 damage.<br>| Your HP - 74.561325 | Boss HP - 118.58591 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 17.22312 amount of damage.<br>You take 23.554003 damage.<br>| Your HP - 51.007324 | Boss HP - 101.362785 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 18.885159 amount of damage.<br>You take 16.806934 damage.<br>| Your HP - 34.20039 | Boss HP - 82.47763 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 18.075796 amount of damage.<br>You take 14.347532 damage.<br>| Your HP - 19.852858 | Boss HP - 64.40183 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>3</em></strong><br>You consume a potion.<br>You take 24.755264 damage.<br>| Your HP - 20.097595 | Boss HP - 64.40183 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 18.169785 amount of damage.<br>You take 5.479629 damage.<br>| Your HP - 14.617966 | Boss HP - 46.232048 |<br>| 1) Attack | 2) Defend | 3) Heal |<br><strong><em>1</em></strong><br>Your attack deals 17.021484 amount of damage.<br>You take 19.016312 damage.<br>You have been defeated!</pre>
+<p></p>
+<p></p>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+<head>
+    <title>3_Rust Ownership, borrowing and more concepts</title>
+    <meta charset="utf-8">
+    
+</head>
+<body>
+<a name="top"></a><h1>Rust Ownership, borrowing and more concepts</h1><p class="book_summary"><p dir="ltr" style="text-align: left;">This week we will go through Rust's concept of Ownership, File manipulation, Struct structure, the basics of modules and lists, vectors and hash maps.</p></p><div class="book_toc_numbered"><a name="toc"></a><h2 class="text-center pb-5">Table of contents</h2><ul><li><a title="1. Rust&#039;s Ownership" class="font-weight-bold text-decoration-none" href="#ch15256">1. Rust's Ownership</a></li><li><a title="2. Structs, Vec data structure" class="font-weight-bold text-decoration-none" href="#ch15257">2. Structs, Vec data structure</a></li><li><a title="3. Hashmap" class="font-weight-bold text-decoration-none" href="#ch15261">3. Hashmap</a></li><li><a title="4. File manipulation" class="font-weight-bold text-decoration-none" href="#ch15258">4. File manipulation</a></li><li><a title="5. Modules" class="font-weight-bold text-decoration-none" href="#ch15259">5. Modules</a></li><li><a title="6. Enum" class="font-weight-bold text-decoration-none" href="#ch15260">6. Enum</a></li></ul></div><div class="book_chapter"><a name="ch15256"></a><h2>1. Rust's Ownership</h2><p dir="ltr" style="text-align: left;">In this chapter, we go through how Rust's Ownership affects the use of variables, why it is used, and what the benefits are.</p>
+<h4 dir="ltr" style="text-align: left;">Ownership</h4>
+<p></p>Ownership is one of Rust's key features that helps manage memory efficiently and safely without a <a href="https://www.geeksforgeeks.org/garbage-collection-java/">garbage collector</a>. It defines who owns certain data and how the data can be used during program execution. In this chapter, we will go into more detail about how ownership works and what rules it follows.<br><br>In Rust, every variable has an owner. This owner is a variable that controls a particular block of memory. There are three important rules related to ownership:<ol>
+    <li>Each piece of data has exactly one owner at a time.</li><li>When the owner exits, the data is automatically freed from memory.&nbsp;</li><li>The data can be transferred to a new owner, but in this case the original owner loses his right to it.</li>
+</ol>These rules ensure that the program does not double deallocate or access memory after a block of memory has already been deallocated.<br><br>When a variable is given a new owner, we talk about ownership transfer. For example, when the value of a variable is passed to another variable, the original variable no longer owns that data and cannot be used. This is important to understand, as Rust's compiler prevents attempts to access data whose ownership has been transferred.<br><br>Consider the following code example:<pre><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>s1 = String::from("Hey");<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>s2 = s1; // Ownership transfers from s1 to s2<br>&nbsp;&nbsp;&nbsp; // println!("{}", s1); // Causes an error, as s1 no longer owns the data<br>&nbsp;&nbsp;&nbsp; println!("{}", s2); // This works, because s2 now owns the data<br>}<br></pre>When s1 is transferred to s2, s1 loses ownership and can no longer be used. This approach helps the programmer avoid mistakes that could lead to inconsistent data usage or memory problems.<br><br>In addition to the transfer of ownership, you can also use pointers (references) in Rust, which allow the data to be used without transferring ownership. There are two types of pointers: immutable and mutable references. With immutable references, data can be read but not modified. Data can be modified with variable references, but the same data can only have one mutable referecne at a time. This prevents multiple parallel edits that could lead to an invalid state.<p><br>Next, we discuss the principles of loaning a variable and examples of how ownership can be effectively managed in different situations.<br><br>An example of a mutable reference:</p><pre><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>mut s = String::from("Hello");<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>r = &amp;<span class="" style="color: rgb(125, 159, 211);">mut </span>s; // Creation of a mutable reference<br>&nbsp;&nbsp;&nbsp; r.push_str(", world!"); // Modifying the data through the reference<br>&nbsp;&nbsp;&nbsp; println!("{}", r); // Using the reference for printing<br>}</pre>
+<p></p>Here, s makes a variable loan to r. During the existence of the loan, s cannot be used directly, which ensures that the modifications are done in a controlled manner.<br><br>Using the reference value, we use the push_str command to add more text to an already existing variable. After the change, when we print the variable r, it prints:<p><span><em>Hei, maailma!</em></span></p>
+<p><span><span><span>When we modify the value of r, we are therefore modifying the value of the s variable through a reference.</span></span></span><em><span><span><span><span><span><br></span></span></span></span></span></em></p>
+<p><em><span><span><br></span></span></em></p>
+<h3>Combining mutable and immmutable references</h3>According to Rust's rules, there cannot be an immutable reference and a mutable referenceat the same time. This rule prevents conflicting situations where an immutable reference would be tried to be used for reading data while the data is being modified at the same time.<br><br>An example of an incorrect combination:<pre><span><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {</span><br><span>&nbsp;&nbsp;&nbsp;<span class="" style="color: rgb(125, 159, 211);"> let mut</span> s = String::from("Hey");</span><br><span></span><br><span>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>r1 = &amp;s; // Immutable reference</span><br><span>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>r2 = &amp;<span class="" style="color: rgb(125, 159, 211);">mut </span>s; // Mutable reference - error!</span><br><span>&nbsp;&nbsp; &nbsp;</span><br><span>&nbsp;&nbsp;&nbsp; println!("{}, {}", r1, r2); // This will not work</span><br><span>}</span><br><span></span></pre><strong><br></strong>
+<p>When running the above code, Rust gives an error code and a clear reason why the program does not compile:</p>
+<pre><span class="" style="color: rgb(239, 69, 64);">error</span>[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable<br>&nbsp;--&gt; src/main.rs:5:14<br>&nbsp; |<br>4 |&nbsp;&nbsp;&nbsp;&nbsp; let r1 = &amp;s; // Un-mutable reference<br>&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">-- immutable borrow occurs here</span><br>5 |&nbsp;&nbsp;&nbsp;&nbsp; let r2 = &amp;mut s; // Mutable reference - error!<br>&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(239, 69, 64);">^^^^^^ mutable borrow occurs here</span><br>6 |<br>7 |&nbsp;&nbsp;&nbsp;&nbsp; println!("{}, {}", r1, r2); // This won't work<br>&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">-- immutable borrow later used here</span></pre>
+<p>This code will not compile because there cannot be an immutable quote r1 and a mutable quote r2 at the same time.</p>
+<p></p>
+<pre><br></pre>
+<p><br></p>
+<p><br></p>
+<p></p></div><a href="#toc">&uarr; top</a><div class="book_chapter"><a name="ch15257"></a><h2>2. Structs, Vec data structure</h2><h4><strong>Struct</strong><br><strong></strong></h4><span>
+    <p>Struct, or structure, is a custom data type that lets you pack together and name multiple related values ​​that form a meaningful entity. If you're familiar with an object-oriented language, a structure is like the data attributes of an object. In this chapter, we go through how Structs can be created in Rust.</p>
+    <p>The following are examples of the struct type:</p>
+</span>
+<pre><span>// struct</span><br><span><span class="" style="color: rgb(125, 159, 211);">struct </span>User {</span><br><span>&nbsp;&nbsp;&nbsp; username: <span class="" style="color: rgb(125, 159, 211);">String</span>,</span><br><span>&nbsp;&nbsp;&nbsp; email: <span class="" style="color: rgb(125, 159, 211);">String</span>,</span><br><span>&nbsp;&nbsp;&nbsp; sign_in_count: <span class="" style="color: rgb(125, 159, 211);">u64</span>,</span><br><span>&nbsp;&nbsp;&nbsp; active: <span class="" style="color: rgb(125, 159, 211);">bool</span>,</span><br><span>}</span><br><span></span><br><span><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {</span><br><span>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>user1 = User {</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; username: String::from("example_user"),</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; email: String::from("example@example.com"),</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sign_in_count: 1,</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; active: true,</span><br><span>&nbsp;&nbsp;&nbsp; };</span><br><span></span></pre><span><br>&nbsp;&nbsp;&nbsp; println!("User name: {}", user1.username);<br>}</span><strong><br><br><br></strong><span>Above we create a new struct type called User. With the User type, we gave four fields:<br>username, which is of type String,<br>email, which is also of type String,<br>sign_in_count of type unsigned integer 64,<br>active of type boolean.</span><span><br><br>In the main function, we create a new "instance" of the User type, to which we assign a value to each field. After creation, the instance of the User type is stored in the user1 variable. We can use the values ​​of the fields of the struct in the print statement as we have seen:</span><pre><span>user1.username</span><br><span></span></pre><span>This returns the value of the username field from the user1 variable, which in this case was "example@example.com".<br><br></span>
+<h4><span><strong>Modifying the fields in a Struct</strong></span><span><strong></strong></span></h4><span>Since Rust defaults to non-modifiable, we can make our struct editable easily by making the whole struct editable:<br><br></span>
+<pre><span><span class="" style="color: rgb(125, 159, 211);">struct </span>User {
+    username: <span class="" style="color: rgb(125, 159, 211);">String</span>,
+    email: <span class="" style="color: rgb(125, 159, 211);">String</span>,
+    sign_in_count: <span class="" style="color: rgb(125, 159, 211);">u64</span>,
+    active: <span class="" style="color: rgb(125, 159, 211);">bool</span>,
+}
+
+<span class="" style="color: rgb(125, 159, 211);">fn </span>main() {
+    <span class="" style="color: rgb(125, 159, 211);">let mut </span>user1 = User {
+        username: String::from("example_user"),
+        email: String::from("example@example.com"),
+        sign_in_count: 1,
+        active: true,
+    };
+
+    // Modifying the email-attribute
+    user1.email = String::from("new_email@example.com");
+    user1.sign_in_count += 1;
+
+    println!("Email: {}", user1.email);
+}<br><br></span></pre>
+<p><span><strong></strong></span><strong></strong></p>When defining the User structure in both examples, we used the dedicated String type instead of using the string-slice-based &amp;str type. This is a deliberate choice because we want each instance of this structure to own all of its data, and for the data to persist as long as the entire structure is valid.<br><br>It is also possible for structures to store references to data owned elsewhere, but this requires the use of lifetimes, which is a feature of Rust. Lifetimes ensure that the data referenced by the structure remains valid as long as the structure itself is valid. More information about lifetimes in <a href="https://doc.rust-lang.org/stable/book/ch10-03-lifetime-syntax.html">chapter 10 of the book</a>.<br><br><h4>Vec data structure</h4>
+<div>
+    <p>In Rust, a list corresponds to a data structure that can be used to store and process data elements in sequential order. However, Rust mainly uses the Vec (vector) data type, like lists. Vec is a table that dynamically adapts to its size.</p>
+    <h5>Feature of Vec</h5>
+    <ul>
+        <li>Dynamic size: A vector can grow and shrink during program execution.</li><li>Homogeneous data type: All elements must be of the same type.</li><li>Very efficient and secure in terms of memory management.</li>
+    </ul>When we create a new Vec list, we need to give it a type. In the example below, we use the type i32. Since Vector is a homogeneous data type, it can only contain similar types. If we want the list to contain more than just numbers. We can create a new struct type whose fields have string values, numbers, and, for example, boolean values. We can store this struct type inside a Vec structure, which allows us to work around this limitation.<br><br>Let's look at a simple example of a Vec structure:</div>
+<div>
+    <pre><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {<br>&nbsp;&nbsp;&nbsp; // Creating a new vector<br>    // with type i32 and make it empty at first<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let mut</span> numbers: Vec&lt;i32&gt; = Vec::new();<br>&nbsp;&nbsp;&nbsp; // Adding elements<br>&nbsp;&nbsp;&nbsp; numbers.push(10);<br>&nbsp;&nbsp;&nbsp; numbers.push(20);<br>&nbsp;&nbsp;&nbsp; numbers.push(30);<br><br>&nbsp;&nbsp;&nbsp; println!("Contents of the vector (list of elements): {:?}", numbers);<br>&nbsp;&nbsp;&nbsp; // Getting elements based on index<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>first_element = numbers[0];<br>&nbsp;&nbsp;&nbsp; println!("First element: {}", first_element);<br><br>&nbsp;&nbsp;&nbsp; // Modifying an element based on index<br>&nbsp;&nbsp;&nbsp; numbers[1] = 25;<br>&nbsp;&nbsp;&nbsp; println!("Updated vector: {:?}", numbers);<br><br>&nbsp;&nbsp;&nbsp; // Iterating through the vector and printing values<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">for </span>number <span class="" style="color: rgb(125, 159, 211);">in </span>&amp;numbers {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println!("Value: {}", number);<br>&nbsp;&nbsp;&nbsp; }<br>}</pre>The program above prints:</div>
+<pre>First element: 10<br>Updated vector: [10, 25, 30]<br>Value: 10<br>Value: 25<br>Value: 30<br><br></pre>We can store other values ​​in the list, such as the struct structure we want that contains different values, from strings to numbers.<br><br>Below is an example program that stores instances of the struct structure in a list, uses the vec! macro to create a new list, and prints the contents of the list.<p><br></p>
+<p></p>
+<div>
+    <pre>// We define our own struct type, which contains different types of fields</pre><pre>struct Person {<br>&nbsp;&nbsp;&nbsp; name: String,<br>&nbsp;&nbsp;&nbsp; age: u32,<br>&nbsp;&nbsp;&nbsp; active: bool,<br>}<br>fn main() {<br>&nbsp;&nbsp;&nbsp; // Create a vector containing Person structs<br>&nbsp;&nbsp;&nbsp; let people: Vec&lt;Person&gt; = vec![<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Person {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: String::from("John Doe"),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; age: 30,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; active: true,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; },<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Person {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: String::from("Jane Smith"),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; age: 25,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; active: false,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; },<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Person {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: String::from("Jack Bold"),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; age: 40,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; active: true,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; },<br>&nbsp;&nbsp;&nbsp; ];<br>&nbsp;&nbsp;&nbsp; // Iterate through the vector and print each person's details<br>&nbsp;&nbsp;&nbsp; for person in people {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println!(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "Name: {}, Age: {}, Active: {}",<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; person.name, person.age, person.active<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; );<br>&nbsp;&nbsp;&nbsp; }<br>}</pre><br>
+</div>Example program's output:<pre>Name: John Doe, Age: 30, Active: true<br>Name: Jane Smith, Age: 25, Active: false<br>Name: Jack Bold, Age: 40, Active: true  </pre>
+<p></p>
+<pre><br></pre>
+<h5>vec!-macro</h5>
+<div>Rust makes use of many macros, such as the println! command. The macro is identified by the ! sign. There is a macro vec for the vector type! which is a convenient way provided by Rust to create a new vector without manually calling Vec::new() and adding elements separately with the push command. In the example above, we used this macro to add structs. Below is a simpler example of using a macro.</div>
+<div><span><br></span></div>
+<div>
+    <pre><span><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {</span><br><span>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>numbers = vec![1, 2, 3, 4, 5];</span><br><span></span><br><span>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">for </span>number <span class="" style="color: rgb(125, 159, 211);">in </span>numbers {</span><br><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println!("Number: {}", number);</span><br><span>&nbsp;&nbsp;&nbsp; }</span><br><span>}</span><br><span></span></pre>Example program's output:
+    <pre>Number: 1<br>Number: 2<br>Number: 3<br>Number: 4<br>Number: 5</pre>
+</div>
+<pre><br></pre>
+<p>The vec structure gives us several useful methods:</p>
+<ul>
+    <li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.push">push</a>: adds the value you give to the end of the vector/list</li><li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.pop">pop</a>: removes the last value from the vector</li><li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.get">get</a>: returns an Option type, a safer way to refer to an element of a vector</li><li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.len">len</a>: returns the length of the vector (the number of elements)</li><li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.remove">remove</a>: removes the desired element from the list based on the index</li><li><a href="https://doc.rust-lang.org/std/vec/struct.Vec.html#method.is_empty">is_empty</a>: returns true or false, depending on whether the vector is empty or not</li>
+</ul>
+<div><br></div>
+<div>The homogeneity of the vec structure can be "circumvented" by using the enum structure as well: more in <a href="https://doc.rust-lang.org/book/ch08-01-vectors.html#using-an-enum-to-store-multiple-types">chapter 8 of the book</a>.</div>
+<p></p></div><a href="#toc">&uarr; top</a><div class="book_chapter"><a name="ch15261"></a><h2>3. Hashmap</h2><h4 dir="ltr" style="text-align: left;">HashMap</h4>
+<div>HashMap is a data structure that stores key-value pairs. It is part of the std::collections module and is used for key-based retrieval. HashMap uses a hash table to quickly search, insert, and remove keys.</div>
+<div><br></div>
+<pre>use std::collections::HashMap;<br><br><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let mut </span>students = HashMap::new();<br><br>&nbsp;&nbsp;&nbsp; // Adding three key-value pairs<br>&nbsp;&nbsp;&nbsp; students.insert("Matti", 25);<br>&nbsp;&nbsp;&nbsp; students.insert("Anna", 22);<br>&nbsp;&nbsp;&nbsp; students.insert("Pekka", 28);<br><br>&nbsp;&nbsp;&nbsp; // Getting a value based on the key<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">if let</span> Some(age) = students.get("Anna") {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println!("Anna is {} years old.", age);<br>&nbsp;&nbsp;&nbsp; }<br><br>&nbsp;&nbsp;&nbsp; // Looping through the key-value pairs<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">for </span>(name, age) <span class="" style="color: rgb(125, 159, 211);">in </span>&amp;students {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println!("{} is {} years old.", name, age);<br>&nbsp;&nbsp;&nbsp; }<br><br>&nbsp;&nbsp;&nbsp; // Updating a value<br>&nbsp;&nbsp;&nbsp; students.insert("Anna", 23);<br><br>&nbsp;&nbsp;&nbsp; // Deletion of a key-value pair<br>&nbsp;&nbsp;&nbsp; students.remove("Pekka");<br>}</pre>
+<div><br></div>HashMap works if the values <span>​​<strong>have implemented the Eq and Hash traits</strong>.</span> Listings of the types found in the standard library that have implemented these traits can be found on their own pages for the&nbsp;<a href="https://doc.rust-lang.org/std/cmp/trait.Eq.html#implementors">Eq-trait</a> and the <a href="https://doc.rust-lang.org/std/hash/trait.Hash.html#implementors">Hash-traitille</a>. These types include, for example, integers.<h4><br></h4>
+<div>HashMap has several useful commands:</div>
+<div>
+    <ul>
+        <li>HashMap::<a href="https://doc.rust-lang.org/std/collections/struct.HashMap.html#method.new">new</a>() creates a new hash table<br></li>
+        <li><a href="https://doc.rust-lang.org/std/collections/struct.HashMap.html#method.insert">insert</a>(key, value) inserts a key-value pair into the table</li>
+        <li><a href="https://doc.rust-lang.org/std/collections/struct.HashMap.html#method.get">get</a>(&amp;key) returns the value as a reference if the key is found in the table</li>
+        <li><a href="https://doc.rust-lang.org/std/collections/struct.HashMap.html#method.insert">insert</a>(key, new_value) inserts a new value in place of the old one</li>
+        <li><a href="https://doc.rust-lang.org/std/collections/struct.HashMap.html#method.remove">remove</a>(&amp;key) removes a key-value pair from the table</li></ul><ul>
+    </ul>
+    <div>Note that "key", "value" and "new_value" are example variable names that must be replaced with the correct variable name as shown above.</div>
+</div></div><a href="#toc">&uarr; top</a><div class="book_chapter"><a name="ch15258"></a><h2>4. File manipulation</h2><p dir="ltr" style="text-align: left;">File processing is a common task in programming. Rust offers powerful tools for handling files using the standard library (std::fs). In Rust, you can write to a file using the std::fs::File class and the write! macro or the std::io::Write trait. Below are instructions and examples of how to work with files in Rust.</p>
+<p dir="ltr" style="text-align: left;">Below is an example made in the main.rs file:</p><pre>use std::fs::File;<br>use std::io::{self, Write};<br><br><span class="" style="color: rgb(125, 159, 211);">fn </span>main() -&gt; <span class="" style="color: rgb(239, 69, 64);">io</span>::Result&lt;()&gt; {<br>    // Ask input from the user<br>    println!("Write something to be saved to the file:");<br>    <span class="" style="color: rgb(125, 159, 211);">let mut</span> user_input = String::new();<br>    <span class="" style="color: rgb(239, 69, 64);">io</span>::stdin()<br>        .read_line(&amp;<span class="" style="color: rgb(125, 159, 211);">mut </span>user_input)<br>        .expect("Error reading input!");<br>    // Create or overwrite existing file called input.txt in the project folder<br>    <span class="" style="color: rgb(125, 159, 211);">let mut</span> file = <span class="" style="color: rgb(239, 69, 64);">File</span>::create("input.txt").expect("Error creating the file!");<br>    // Write user input to the file<br>    file<br>        .write_all(user_input.as_bytes())<br>        .expect("Error writing to the file!");<br>    println!("Input saved to the file 'input.txt'.");<br>    Ok(())<br>}<br><br></pre><br>In the example, we ask the user for a value and store it in a mutable variable.<br><br>We create a file named syote.txt and use the write_all command to write the input given by the user to the file. Write_all tries to write all the given data until there is no data.<br><br>More simply, we can also write user read_line input to a file with the <a href="https://doc.rust-lang.org/std/macro.writeln.html">writeln! macro</a>, replacing the write_all use of the file:<br><br><div>
+    <pre>writeln!(tiedosto, "{}", syote.trim()).unwrap();</pre>
+</div>writeln! -macro first contains the file to be saved, next we give { } in a familiar way from the println! macro, and thirdly we give the desired input.<br>If we don't require any formatting, we can just give the desired input in the second parameter.<p></p></div><a href="#toc">&uarr; top</a><div class="book_chapter"><a name="ch15259"></a><h2>5. Modules</h2><h4 dir="ltr" style="text-align: left;">What are modules?</h4>
+<div>Modules in Rust are a way to organize and group program code into logical parts. Modules help keep code clean and manageable, especially in large projects. Modules also allow you to control the visibility of the code so that part of the code is public (<em>pub</em>) and part is private.<br><br>In Rust, each file can act as a module, but you can also create submodules inside the same file with the <em>mod </em>keyword. Modules allow separation of reusable code components.</div><div><br>
+</div>
+<div><br></div>
+<h4>How to create your own module and use it?</h4>
+<div>Creating your own module in Rust is done with the <em>mod </em>keyword. You can create the module either directly in the file or as a sector-specific module.<br><br>An example of a simple module in the same file:</div><div><br></div>
+<div>
+    <pre><span class="" style="color: rgb(125, 159, 211);">mod </span>utilities {<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">pub fn</span> greet(name: &amp;<span class="" style="color: rgb(125, 159, 211);">str</span>) {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; println!("Hey, {}!", name);<br>&nbsp;&nbsp;&nbsp; }<br>}</pre>Here the module utilities contains the public function greet. Note the pub keyword, which makes the function visible outside the module.<br>More generally, modules are used in their own folder. Below we see the folder hierarchy after running the <em>cargo new project</em> command:</div><div><img src="data/kuva.png" alt="" role="presentation" class="img-fluid"></div>
+<div><br></div>To create your own module, create a folder inside the <em>src </em>folder with the name you want. Create a new Rust file in the folder and give it a name. Also create a <em>mod.rs</em> where you add:<br><em>pub mod {your_module_name};</em><br>After this, your folder hierarchy should look similar to the one below. I created a folder called <em>project_module</em>, I created a file called <em>helper_file.rs</em> and <em>mod.rs</em> in the folder.<div><img src="data/kuva%20%283%29.png" alt="" role="presentation" class="img-fluid"><br></div>
+<div><br></div>
+<div>mod.rs file content:</div>
+<div>
+    <div>
+        <pre><span class="" style="color: rgb(125, 159, 211);">pub mod</span> helper_file;</pre>
+    </div><br>
+</div>
+<p><span style="font-weight: normal;"><span>In the <em>helper_file</em>, I made an example function that we call in the main.rs file. The function needs the <em>pub </em>keyword so we can call it. Contents of <em>helper_file</em>:</span></span></p>
+<p><span style="font-weight: normal;"></span></p>
+<div>
+    <pre><span class="" style="color: rgb(125, 159, 211);">pub fn</span> printing_function(name: &amp;<span class="" style="color: rgb(125, 159, 211);">str</span>) {</pre>
+    <pre>&nbsp; &nbsp; println!("Your name seems to be {}.", name);</pre>
+    <pre>}</pre>
+</div>
+<div>In the main.rs file I call the function, but before that I bring the module to use with the use command, and I define the helper_file to use. Example below:</div><div><br></div>
+<div>
+    <pre><span class="" style="color: rgb(125, 159, 211);">pub mod</span> project_module;</pre>
+    <pre>use project_module::helper_file;</pre>
+    <pre><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {</pre>
+    <pre>&nbsp; &nbsp; let your_name: &amp;<span class="" style="color: rgb(125, 159, 211);">str </span>= "Rust student";</pre>
+    <pre>&nbsp; &nbsp; helper_file::printing_function(your_name);</pre>
+    <pre>}</pre>The program outputs:
+    <pre>Your name seems to be Rust student.</pre>
+</div>
+<p></p>
+<div><br></div>
+<div>Note the syntax: using "<strong>::</strong>" I can call <em>printing_function </em>from <em>helper_file</em>. I could have also imported just a function to use, and simplified the function call like this:</div><div><br></div>
+<div>
+    <div>
+        <pre><span class="" style="color: rgb(125, 159, 211);">pub mod </span>project_module;</pre>
+        <pre>use project_module::helper_file::printing_function;</pre>
+        <pre><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {</pre>
+        <pre>&nbsp; &nbsp; let your_name: &amp;<span class="" style="color: rgb(125, 159, 211);">str </span>= "Rust student";</pre>
+        <pre>&nbsp; &nbsp; printing_function(your_name);</pre>
+        <pre>}<br><br></pre>This way I don't have to use the module name in the function call. If there are many modules, it may be clearer to leave the function name as in the first example.<br><br>If the module has more than one function, you can import all the functions with the syntax "<strong> ::*</strong> " as shown below. We also create another function for the example in the <em>helper_file:</em><br><em>helper_file.rs:</em></div><div><br></div><div>
+        <pre><span class="" style="color: rgb(125, 159, 211);">pub fn</span> printing_function(name: &amp;<span class="" style="color: rgb(125, 159, 211);">str</span>) {</pre>
+        <pre>&nbsp; &nbsp; println!("Your name seems to be {}.", name);</pre>
+        <pre>}</pre>
+        <pre><span class="" style="color: rgb(125, 159, 211);">pub fn</span> sum_two_number(number1: <span class="" style="background-color: rgb(255, 255, 255); color: rgb(125, 159, 211);">i32</span>, number2: <span class="" style="color: rgb(125, 159, 211);">i32</span>) -&gt; <span class="" style="background-color: rgb(255, 255, 255); color: rgb(125, 159, 211);">i32 </span>{</pre>
+        <pre>&nbsp; &nbsp; number1 + number2</pre>
+        <pre>}<br><br></pre>
+    </div>
+</div>
+<div>Main.rs:</div>
+<div>
+    <div>
+        <pre><span class="" style="color: rgb(125, 159, 211);">pub mod</span> project_module;</pre>
+        <pre>use project_module::helper_file::*;</pre>
+        <pre><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {</pre>
+        <pre>&nbsp; &nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>your_name: &amp;<span class="" style="color: rgb(125, 159, 211);">str </span>= "Rust student";</pre>
+        <pre>&nbsp; &nbsp; printing_function(your_name);</pre>
+        <pre>&nbsp; &nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>numero1: <span class="" style="color: rgb(125, 159, 211);">i32 </span>= 5;</pre>
+        <pre>&nbsp; &nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>numero2: <span class="" style="color: rgb(125, 159, 211);">i32 </span>= 5;</pre>
+        <pre>&nbsp; &nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>summa: <span class="" style="color: rgb(125, 159, 211);">i32 </span>= sum_two_number(numero1, numero2);</pre>
+        <pre>&nbsp; &nbsp; println!{"{} + {} = {}", numero1, numero2, summa}</pre>
+        <pre>}</pre>
+    </div>
+    <div>Program output:
+        <pre>Your name seems to be Rust student.<br>5 + 5 = 10</pre>
+    </div><br>
+</div></div><a href="#toc">&uarr; top</a><div class="book_chapter"><a name="ch15260"></a><h2>6. Enum</h2><p dir="ltr" style="text-align: left;"></p>
+<h4>Enum</h4>
+<div>
+    <p></p>
+</div>Rust's <a href="https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html">Enum</a> construct allows you to define enumerations. The Enum construct can be used to express that a variable can contain one of several options.<br><br>
+<pre><span class="" style="color: rgb(125, 159, 211);">enum </span>Color {<br>&nbsp;&nbsp;&nbsp; Red,<br>&nbsp;&nbsp;&nbsp; Green,<br>&nbsp;&nbsp;&nbsp; Blue,<br>}<br><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>favorite: Color = Color::Green;<br>&nbsp;&nbsp; &nbsp;<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">match </span>favorite {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Color::Red =&gt; println!("Red chosen!"),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Color::Green =&gt; println!("Green chosen!"),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Color::Blue =&gt; println!("Blue chosen!"),<br>&nbsp;&nbsp;&nbsp; }<br>}</pre>In the above example, we create a variable called favorite, which is of type "Color". The color can be either "Red", "Green" or "Blue". We select the color using the "<strong>::</strong>" operator. This operator is used in addition to the enum structure when referencing modules and functions (std::io, String::from("Hello") ). This operator refers to the "path" to a specific destination.<br>In the above example, we use a match statement, which prints out which color we selected based on what we gave to the favorite variable.<span><span><br><br></span></span>
+<h4><span><span>Enum-type with data</span></span></h4>
+<p>An enum structure can also contain data. We have already seen an example of this with the Option and Result types. Below we see a different example:</p>
+<pre><span class="" style="color: rgb(125, 159, 211);">enum </span>Message {<br>&nbsp;&nbsp;&nbsp; Text(String),<br>&nbsp;&nbsp;&nbsp; Integer(i32),<br>&nbsp;&nbsp;&nbsp; Stop,<br>}<br><span class="" style="color: rgb(125, 159, 211);">fn </span>print_message(message: <span class="" style="color: rgb(125, 159, 211);">Message</span>) {<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">match </span>message {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Message::Text(s) =&gt; println!("Text: {}", s),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Message::Integer(n) =&gt; println!("Integer: {}", n),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Message::Stop =&gt; println!("Ending message"),<br>&nbsp;&nbsp;&nbsp; }<br>}<br><span class="" style="color: rgb(125, 159, 211);">fn </span>main() {<br>&nbsp;&nbsp;&nbsp; <span class="" style="color: rgb(125, 159, 211);">let </span>message = Message::Integer(42);<br>&nbsp;&nbsp;&nbsp; print_message(message);<br>}<br><br></pre>We create an Enum structure called Message. Message can be of three types, each of which is different. Text can contain a String type, Number can contain an integer, and Quit is a standalone String that contains nothing in itself. Similar to the previous example, we assign the value we want to our variable message, in this case an integer, and print it using a match statement.<br><br><h4><span>Enum - Option and Result type</span></h4>
+<div>Earlier we went over the <a href="https://doc.rust-lang.org/std/option/enum.Option.html">Option</a> and&nbsp;<a href="https://doc.rust-lang.org/std/result/enum.Result.html">Result</a> types. When we look at these types in more detail, we see that they are Enum structures.</div>
+<div><br></div>
+<div>
+    <pre><code><span class="" style="color: rgb(125, 159, 211);">pub enum</span> Result&lt;T, E&gt; {
+   Ok(T),
+   Err(E),
+}</code></pre>
+    <pre><code><span class="" style="color: rgb(125, 159, 211);">pub enum</span> Option&lt;T&gt; {
+    None,
+    Some(T),
+}</code></pre>Result contains two types, either the type we want, or an error. Option contains either the None value, which itself contains nothing, or the Some type, which contains the value T we provide.</div>
+<p></p></div><a href="#toc">&uarr; top</a>
+</body>
+</html>
