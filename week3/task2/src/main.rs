@@ -29,7 +29,18 @@ fn main() {
 
 	let player = Player::new(selected_country);
 
-	player.inspect();
+	println!("| Inspection on your own nation? | y = yes | n = no |");
+	let selection = read_input_string(&mut input);
+
+	match selection.as_str() {
+		"y" => player.inspect(),
+		"n" => println!("The leader is confident. No inspection needed."),
+		_ => {
+			println!("Invalid input. Try again");
+			return;
+		}
+	}
+
 }
 
 fn print_country(country: &Country) {
@@ -52,4 +63,11 @@ fn read_input_number(input: &mut String) -> u8 {
 			}
 		};
 	}
+}
+
+fn read_input_string(input: &mut String) -> String {
+	input.clear();
+
+	io::stdin().read_line(input).expect("Error reading input");
+	input.trim().to_string()
 }
