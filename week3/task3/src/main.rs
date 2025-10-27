@@ -39,7 +39,7 @@ fn main() {
 			}
 		}
 
-		println!("| 1) Spy on a country | 2) Invade a country | 0) Exit program |");
+		println!("| 1) Spy on a country | 0) Exit program |");
     let spy_selection = read_input_number(&mut input);
 
     match spy_selection {
@@ -60,9 +60,6 @@ fn main() {
 
         player.spy(spy_target);
       },
-			2 => {
-				println!("CONQUERINNNG!!");
-			}
       0 => break,
       _ => println!("Invalid game input. Try again.")
     }

@@ -33,7 +33,5 @@ impl Player {
 		}
 	}
 
-	pub fn conquer_nation(&mut self, target: Country, my_country: &Country) {
 
-	}
 }
