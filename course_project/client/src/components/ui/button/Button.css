@@ -1,0 +1,27 @@
+button {
+  all: unset;
+  cursor: pointer;
+  padding: 0.125rem 0.25rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.btn-cta {
+  background-color: rgb(173, 216, 230);
+  border-color: black;
+  color: black;
+
+  &:hover {
+    background-color: rgba(173, 216, 230, 0.75);
+  }
+}
+
+.btn-secondary {
+  background-color: inherit;
+  color: inherit;
+  border-color: 1px solid black;
+}
