@@ -10,7 +10,7 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
-const geist_mono = Geist_Mono({
+const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} ${geist_mono.variable}`}>
+      <body className={`${outfit.variable} ${geistMono.variable}`}>
         <div className="layout">
           <Navbar />
           {children}

@@ -1,6 +1,7 @@
 import "./HeroSection.css";
 import Image from "next/image";
 import Button from "@/components/ui/button/Button";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -13,16 +14,19 @@ export default function HeroSection() {
             electronics, you name it...
           </p>
           <div className="hero-buttons">
-            <Button className="btn-cta">See the products</Button>
+            <Link href="/" className="hero-link">
+              <Button className="btn-cta">See the products</Button>
+            </Link>
           </div>
         </div>
       </div>
       <div className="hero-image">
         <Image
           src="/images/shophero.webp"
-          alt="Hero image"
+          alt="Fake store for all the fake people"
           title="fake store"
           fill
+          priority
           style={{ objectFit: "cover" }}
         />
       </div>
