@@ -21,7 +21,7 @@ struct HealthResponse {
     uptime: f64,
 }
 
-pub async fn create_app() -> Router {
+pub fn create_app() -> Router {
     // Force START_TIME to initialize now
     let _ = *START_TIME;
 
@@ -39,42 +39,16 @@ async fn health_check() -> Json<HealthResponse> {
     })
 }
 
-async fn log_middleware(
-    req: Request,
-    next: Next,
-) -> Result<Response, StatusCode> {
+async fn log_middleware(req: Request, next: Next) -> Result<Response, StatusCode> {
     let method = req.method().clone();
-    let uri = req.uri().clone();
+    let path = req.uri().path().to_string();
+
+    tracing::info!("→ {} {}", method, path);
 
     let response = next.run(req).await;
     let status = response.status();
 
-    let (parts, body) = response.into_parts();
-    let bytes = to_bytes(body, usize::MAX)
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    tracing::info!("← {} {} {}", method, path, status.as_u16());
 
-    // Pretty print JSON in logs
-    if let Ok(json) = serde_json::from_slice::<serde_json::Value>(&bytes) {
-        let pretty = serde_json::to_string_pretty(&json).unwrap_or_else(|_| String::from_utf8_lossy(&bytes).to_string());
-        tracing::info!(
-            "\n{} {} {}\nResponse:\n{}",
-            method,
-            uri.path(),
-            status.as_u16(),
-            pretty
-        );
-    } else {
-        let body_str = String::from_utf8_lossy(&bytes);
-        tracing::info!(
-            "{} {} {} - Response: {}",
-            method,
-            uri.path(),
-            status.as_u16(),
-            body_str
-        );
-    }
-
-    let response = Response::from_parts(parts, Body::from(bytes));
     Ok(response)
 }

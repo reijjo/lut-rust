@@ -27,7 +27,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing::info!("Environment: '{}'", environment);
     tracing::info!("🚀 Server starting on http://{}", addr);
 
-    let app = app::create_app().await;
+    let app = app::create_app();
     let listener = TcpListener::bind(&addr).await?;
 
     axum::serve(listener, app).await?;
