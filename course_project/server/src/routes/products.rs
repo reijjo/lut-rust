@@ -4,6 +4,7 @@ use axum::{
     Json, Router,
 };
 use serde_json::json;
+
 use crate::models::product::Product;
 
 pub fn product_routes() -> Router {

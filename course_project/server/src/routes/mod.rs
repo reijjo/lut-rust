@@ -1,6 +1,5 @@
 pub mod health;
 pub mod products;
-
 use axum::Router;
 
 pub fn init_routes() -> Router {
