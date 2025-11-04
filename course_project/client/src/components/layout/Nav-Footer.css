@@ -8,8 +8,7 @@ footer {
   border-top: 1px solid white;
 }
 
-.footer-content,
-.nav-content {
+.footer-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,23 +17,14 @@ footer {
   padding-block: 1rem;
 }
 
-.footer-links,
-.nav-links {
+.footer-links {
   display: flex;
   gap: 1rem;
+  text-transform: capitalize;
+
+  & a:hover {
+    transform: scale(1.125);
+  }
 }
 
 /* Navbar */
-nav {
-  height: var(--nav-height);
-  z-index: 10;
-  background-color: var(--background);
-  position: fixed;
-  top: 0;
-  left: 0;
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.075);
-
-  & li {
-    list-style: none;
-  }
-}

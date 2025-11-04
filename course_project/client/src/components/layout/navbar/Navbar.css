@@ -1,0 +1,35 @@
+nav {
+  height: var(--nav-height);
+  z-index: 10;
+  background-color: var(--background);
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: var(--shadow-m);
+
+  & li {
+    list-style: none;
+
+    & a.active {
+      font-weight: 600;
+    }
+
+    & a:hover:not(.active) {
+      color: var(--accent-dark);
+    }
+  }
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  text-transform: capitalize;
+}
+
+.nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+}

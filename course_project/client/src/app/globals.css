@@ -47,6 +47,11 @@ main {
 :root {
   --nav-height: 9svh;
 
+  --shadow-m: 0 1rem 2rem rgba(0, 0, 0, 0.075);
+
   --foreground: #171717;
   --background: #fafafa;
+
+  --accent: lightblue;
+  --accent-dark: hsl(195, 53%, 39%);
 }
