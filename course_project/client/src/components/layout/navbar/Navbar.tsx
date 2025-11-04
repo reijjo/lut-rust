@@ -69,13 +69,18 @@ export default function Navbar() {
         <Button
           className="btn-secondary nav-hamburger"
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={
+            mobileOpen ? "Close navigation menu" : "Open navigation menu"
+          }
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-navigation"
         >
           <FontAwesomeIcon icon={mobileOpen ? faClose : faBars} />
         </Button>
         <NavCart />
       </div>
       {mobileOpen && (
-        <div className="mobile-menu">
+        <div className="mobile-menu" id="mobile-navigation">
           <NavLinks setMobileOpen={setMobileOpen} />
         </div>
       )}

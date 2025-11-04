@@ -35,17 +35,17 @@ nav {
   height: 100%;
   gap: 1.5rem;
   text-transform: capitalize;
-
-  @media only screen and (max-width: 800px) {
-    order: 0;
-  }
+  order: 1;
 
   @media only screen and (max-width: 800px) {
     display: none;
+    order: 0;
   }
 }
 
 .nav-logo {
+  order: 0;
+
   @media only screen and (max-width: 800px) {
     order: 1;
   }
@@ -55,6 +55,7 @@ nav {
   height: 2.5rem;
   width: 2.5rem;
   padding: 0;
+
   @media only screen and (min-width: 801px) {
     display: none;
   }
