@@ -1,6 +1,6 @@
 import HeroSection from "./_components/HeroSection";
 
-export default function Home() {
+export default async function Home() {
   return (
     <main>
       <HeroSection />

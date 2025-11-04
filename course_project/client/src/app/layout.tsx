@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Outfit, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./layout.css";
-import Navbar from "@/components/layout/Navbar";
+import Navbar from "@/components/layout/navbar/Navbar";
 import Footer from "@/components/layout/Footer";
+import { config } from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false;
 
 const outfit = Outfit({
   variable: "--font-outfit",
