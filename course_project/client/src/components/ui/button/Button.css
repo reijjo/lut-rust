@@ -11,12 +11,12 @@ button {
 }
 
 .btn-cta {
-  background-color: rgb(173, 216, 230);
+  background-color: hsl(195, 53%, 79%);
   border-color: black;
   color: black;
 
   &:hover {
-    background-color: rgba(173, 216, 230, 0.75);
+    background-color: hsl(195, 53%, 84%);
   }
 }
 
