@@ -18,6 +18,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(80svh - var(--nav-height));
+  height: calc(90svh - var(--nav-height));
   gap: 1rem;
 }

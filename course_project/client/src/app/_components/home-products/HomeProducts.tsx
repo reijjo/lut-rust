@@ -52,11 +52,11 @@ export default function HomeProducts({ products }: HomeProductsProps) {
         </Link>
       </section>
       <section className="home-product-section">
-        <h2>{allProducts[10].category}</h2>
+        <h2>{allProducts[13].category}</h2>
         <Link href="/products/electronics" className="home-product-item">
           <Image
             src={allProducts[13].image}
-            alt={allProducts[10].category}
+            alt={allProducts[13].category}
             fill
             sizes="(max-width: 800px) 100vw"
             style={{ objectFit: "contain" }}
