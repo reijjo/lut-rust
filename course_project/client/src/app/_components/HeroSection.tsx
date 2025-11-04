@@ -9,10 +9,12 @@ export default function HeroSection() {
       <div className="hero-text">
         <h1>We got the best fake store in town!</h1>
         <div className="hero-desc">
-          <p>
-            Find all the <span>best products!</span> Clothes, jewelry,
-            electronics, you name it...
-          </p>
+          <div>
+            <p>
+              Find all the <span>best products!</span>{" "}
+            </p>{" "}
+            <p>Clothes, jewelry, electronics, you name it...</p>
+          </div>
           <div className="hero-buttons">
             <Link href="/products" className="hero-link">
               <Button className="btn-cta">See All Products</Button>
