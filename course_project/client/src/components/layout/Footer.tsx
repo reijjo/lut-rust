@@ -8,10 +8,20 @@ export default function Footer() {
       <div className="footer-content wrapper">
         <p>&copy; {new Date().getFullYear()} Teemu Aitomeri</p>
         <div className="footer-links">
-          <a href="/" target="_blank" title="LinkedIn">
+          <a
+            href="https://www.linkedin.com/in/teemu-aitomeri/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="LinkedIn"
+          >
             <FontAwesomeIcon icon={faLinkedin} size="lg" />
           </a>
-          <a href="/" target="_blank" title="GitHub">
+          <a
+            href="https://github.com/reijjo"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="GitHub"
+          >
             <FontAwesomeIcon icon={faGithub} size="lg" />
           </a>
         </div>
