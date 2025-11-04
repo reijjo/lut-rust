@@ -4,10 +4,6 @@ nav {
   width: 100%;
 }
 
-footer {
-  border-top: 1px solid white;
-}
-
 .footer-content {
   display: flex;
   justify-content: space-between;

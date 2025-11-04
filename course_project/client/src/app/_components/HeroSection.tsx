@@ -14,8 +14,8 @@ export default function HeroSection() {
             electronics, you name it...
           </p>
           <div className="hero-buttons">
-            <Link href="/" className="hero-link">
-              <Button className="btn-cta">See the products</Button>
+            <Link href="/products" className="hero-link">
+              <Button className="btn-cta">See All Products</Button>
             </Link>
           </div>
         </div>
@@ -26,6 +26,7 @@ export default function HeroSection() {
           alt="Fake store for all the fake people"
           title="fake store"
           fill
+          sizes="(max-width: 800px) 100vw"
           priority
           style={{ objectFit: "cover" }}
         />

@@ -5,5 +5,5 @@ use axum::Router;
 pub fn init_routes() -> Router {
   Router::new()
 		.merge(health::routes())
-		.nest("/products", products::product_routes())
+		.nest("/api/products", products::product_routes())
 }

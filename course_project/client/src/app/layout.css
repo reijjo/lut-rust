@@ -12,3 +12,12 @@
   padding: 0 1rem;
   margin: 0 auto;
 }
+
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(90svh - var(--nav-height));
+  gap: 1rem;
+}
