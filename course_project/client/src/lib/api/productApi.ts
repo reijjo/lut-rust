@@ -17,7 +17,9 @@ export const getProductById = async (id: number): Promise<Product> => {
   const response = await fetch(`${API_URL}/api/products/${id}`);
 
   if (!response.ok) {
-    throw new Error("Failed to fetch product");
+    throw new Error(
+      `Failed to fetch product ${id}: ${response.status} ${response.statusText}`
+    );
   }
 
   const product = await response.json();

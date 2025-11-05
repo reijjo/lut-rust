@@ -12,8 +12,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const product = getProductById(Number(id));
 
   return (
-    <Suspense fallback={<div>Loading product...</div>}>
-      <Product product={product} />
-    </Suspense>
+    <main>
+      <Suspense fallback={<div>Loading product...</div>}>
+        <Product product={product} />
+      </Suspense>
+    </main>
   );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import "./ProductList.css";
 import { Product } from "@/utils/types";
 import { use } from "react";
