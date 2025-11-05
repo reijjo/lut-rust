@@ -3,6 +3,8 @@ use once_cell::sync::Lazy;
 use serde::Serialize;
 use std::time::Instant;
 
+use crate::app::AppState;
+
 static START_TIME: Lazy<Instant> = Lazy::new(Instant::now);
 
 #[derive(Serialize)]
@@ -11,7 +13,7 @@ pub struct HealthResponse {
     uptime: f64,
 }
 
-pub fn routes() -> Router {
+pub fn routes() -> Router<AppState>{
     let _ = *START_TIME; // initialize timer
     Router::new().route("/up", get(health_check))
 }

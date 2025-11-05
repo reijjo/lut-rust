@@ -1,5 +1,5 @@
 use axum::{
-		extract::Path,
+		extract::{Path, State},
     http::StatusCode,
     routing::get,
     Json, Router,
@@ -7,17 +7,20 @@ use axum::{
 use serde_json::json;
 
 use crate::models::product::Product;
+use crate::app::AppState;
 
-pub fn product_routes() -> Router {
+pub fn product_routes() -> Router<AppState> {
   Router::new()
     .route("/", get(get_products))
 		.route("/{id}", get(get_product_by_id))
 }
 
-async fn get_products() -> Result<Json<Vec<Product>>, (StatusCode, 			Json<serde_json::Value>)> {
-  let client = reqwest::Client::new();
-
-	let response = match client.get("https://fakestoreapi.com/products").send().await {
+async fn get_products(State(state): State<AppState>) -> Result<Json<Vec<Product>>, (StatusCode, 			Json<serde_json::Value>)> {
+	let response = match state.http_client
+		.get("https://fakestoreapi.com/products")
+		.send()
+		.await
+	{
   	Ok(resp) => resp,
   	Err(e) => {
       tracing::error!("Failed to fetch products: {}", e);
@@ -42,12 +45,14 @@ async fn get_products() -> Result<Json<Vec<Product>>, (StatusCode, 			Json<serde
   Ok(Json(products))
 }
 
-async fn get_product_by_id(Path(id): Path<u32>) -> Result<Json<Product>, (StatusCode, Json<serde_json::Value>)> {
-	let client = reqwest::Client::new();
-
+async fn get_product_by_id(State(state): State<AppState>, Path(id): Path<u32>) -> Result<Json<Product>, (StatusCode, Json<serde_json::Value>)> {
 	let url = format!("https://fakestoreapi.com/products/{}", id);
 
-	let response = match client.get(&url).send().await {
+	let response = match state.http_client
+		.get(&url)
+		.send()
+		.await
+	{
 		Ok(res) => res,
 		Err(e) => {
 			tracing::error!("Failed to fetch product with {}: {}", id, e);
