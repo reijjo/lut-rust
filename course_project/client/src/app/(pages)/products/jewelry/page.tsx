@@ -1,7 +1,17 @@
-export default function Jewelry() {
+import { getProducts } from "@/lib/api/productApi";
+import { Suspense } from "react";
+import ProductList from "../_components/ProductList";
+
+export default function Jewelery() {
+  const jeweleryProducts = getProducts().then((products) =>
+    products.filter((product) => product.category === "jewelery")
+  );
+
   return (
     <main>
-      <h1>Jewelry</h1>
+      <Suspense fallback={<div>Loading jewelry...</div>}>
+        <ProductList products={jeweleryProducts} header="Jewelery" />
+      </Suspense>
     </main>
   );
 }

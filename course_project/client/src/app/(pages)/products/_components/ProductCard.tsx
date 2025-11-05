@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Product } from "@/utils/types";
+import { formatPrice } from "@/utils/formatters";
 
 type ProductCardProps = {
   product: Product;
@@ -12,7 +13,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="product-image-wrapper">
         <Image
           src={product.image}
-          alt={product.category}
+          alt={product.title}
           fill
           style={{ objectFit: "contain" }}
           sizes="200px"
@@ -20,7 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
       <div className="product-card-info">
         <p>{product.title}</p>
-        <p>{product.price} €</p>
+        <p>{formatPrice(product.price)}</p>
       </div>
     </Link>
   );
