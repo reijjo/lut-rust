@@ -1,6 +1,7 @@
 import { getProducts } from "@/lib/api/productApi";
 import { Suspense } from "react";
 import ProductList from "../_components/ProductList";
+import { Loading } from "@/components/ui/Loading";
 
 export default function Womens() {
   const womensProducts = getProducts().then((products) =>
@@ -9,7 +10,7 @@ export default function Womens() {
 
   return (
     <main>
-      <Suspense fallback={<div>Loading women's products...</div>}>
+      <Suspense fallback={<Loading text="Loading women's products..." />}>
         <ProductList products={womensProducts} header="Women's Collection" />
       </Suspense>
     </main>
