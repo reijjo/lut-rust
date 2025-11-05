@@ -8,7 +8,7 @@ export default function Products() {
 
   return (
     <main>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading text="Loading products..." />}>
         <ProductList products={products} header="Products" />
       </Suspense>
     </main>

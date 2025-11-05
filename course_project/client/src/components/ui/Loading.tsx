@@ -13,7 +13,7 @@ const style = {
 
 export const Loading = ({ text = "Loading..." }: LoadingProps) => {
   return (
-    <div style={style}>
+    <div style={style} role="status" aria-live="polite">
       <p>{text}</p>
     </div>
   );
