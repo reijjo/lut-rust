@@ -41,7 +41,7 @@ export default function HomeProducts({ products }: HomeProductsProps) {
       </section>
       <section className="home-product-section">
         <h2>{allProducts[5].category}</h2>
-        <Link href="/products/jewelery" className="home-product-item">
+        <Link href="/products/jewelry" className="home-product-item">
           <Image
             src={allProducts[5].image}
             alt={allProducts[5].category}

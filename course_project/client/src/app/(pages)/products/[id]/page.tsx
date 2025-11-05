@@ -1,6 +1,7 @@
 import { getProductById } from "@/lib/api/productApi";
 import Product from "./_components/Product";
 import { Suspense } from "react";
+import { Loading } from "@/components/ui/Loading";
 
 type ProductPageProps = {
   params: Promise<{ id: string }>;
@@ -13,7 +14,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <main>
-      <Suspense fallback={<div>Loading product...</div>}>
+      <Suspense fallback={<Loading text="Loading product..." />}>
         <Product product={product} />
       </Suspense>
     </main>
