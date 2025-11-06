@@ -7,7 +7,7 @@ use axum::{
 use serde_json::json;
 
 use crate::models::cart::Cart;
-use crate::routes::AppState;
+use crate::app::AppState;
 
 pub fn cart_routes() -> Router<AppState> {
 	Router::new()

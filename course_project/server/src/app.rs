@@ -8,7 +8,7 @@ use crate::routes;
 use crate::middleware::logger::log_middleware;
 use crate::models::cart::Cart;
 
-// Mutex = Only one can read/write at the time
+// Mutex = Only one can read/write at a time
 // Arc = Shareable acress entire server
 #[derive(Clone)]
 pub struct AppState {
@@ -22,10 +22,7 @@ pub fn create_app() -> Router {
 		.build()
 		.expect("Failed to create HTTP client");
 
-	let cart = Arc::new(Mutex::new(Cart {
-		products: vec![],
-		total: 0.0
-	}));
+	let cart = Arc::new(Mutex::new(Cart::new()));
 
 	let state = AppState {
 		http_client,
