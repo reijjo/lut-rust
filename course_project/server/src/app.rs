@@ -2,13 +2,18 @@ use axum::{
   middleware::{self},
   Router,
 };
+use std::sync::{Arc, Mutex};
 
 use crate::routes;
 use crate::middleware::logger::log_middleware;
+use crate::models::cart::Cart;
 
+// Mutex = Only one can read/write at the time
+// Arc = Shareable acress entire server
 #[derive(Clone)]
 pub struct AppState {
-	pub http_client: reqwest::Client
+	pub http_client: reqwest::Client,
+	pub cart: Arc<Mutex<Cart>>
 }
 
 pub fn create_app() -> Router {
@@ -17,8 +22,14 @@ pub fn create_app() -> Router {
 		.build()
 		.expect("Failed to create HTTP client");
 
+	let cart = Arc::new(Mutex::new(Cart {
+		products: vec![],
+		total: 0.0
+	}));
+
 	let state = AppState {
-		http_client
+		http_client,
+		cart
 	};
 
 

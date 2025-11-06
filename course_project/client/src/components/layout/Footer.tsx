@@ -1,12 +1,21 @@
+"use client";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Nav-Footer.css";
 import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { useState, useEffect } from "react";
 
 export default function Footer() {
+  const [year, setYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+
   return (
     <footer>
       <div className="footer-content wrapper">
-        <p>&copy; {new Date().getFullYear()} Teemu Aitomeri</p>
+        <p>&copy; {year} Teemu Aitomeri</p>
         <div className="footer-links">
           <a
             href="https://www.linkedin.com/in/teemu-aitomeri/"
