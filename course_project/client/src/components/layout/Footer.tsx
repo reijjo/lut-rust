@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer>
       <div className="footer-content wrapper">
-        <p>&copy; {new Date().getFullYear()} Teemu Aitomeri</p>
+        <p>&copy; 2025 Teemu Aitomeri</p>
         <div className="footer-links">
           <a
             href="https://www.linkedin.com/in/teemu-aitomeri/"

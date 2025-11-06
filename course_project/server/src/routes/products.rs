@@ -15,7 +15,9 @@ pub fn product_routes() -> Router<AppState> {
 		.route("/{id}", get(get_product_by_id))
 }
 
-async fn get_products(State(state): State<AppState>) -> Result<Json<Vec<Product>>, (StatusCode, Json<serde_json::Value>)> {
+async fn get_products(
+	State(state): State<AppState>
+) -> Result<Json<Vec<Product>>, (StatusCode, Json<serde_json::Value>)> {
 	let response = match state.http_client
 		.get("https://fakestoreapi.com/products")
 		.send()
@@ -45,7 +47,9 @@ async fn get_products(State(state): State<AppState>) -> Result<Json<Vec<Product>
   Ok(Json(products))
 }
 
-async fn get_product_by_id(State(state): State<AppState>, Path(id): Path<u32>) -> Result<Json<Product>, (StatusCode, Json<serde_json::Value>)> {
+async fn get_product_by_id(
+	State(state): State<AppState>, Path(id): Path<u32>
+) -> Result<Json<Product>, (StatusCode, Json<serde_json::Value>)> {
 	let url = format!("https://fakestoreapi.com/products/{}", id);
 
 	let response = match state.http_client
