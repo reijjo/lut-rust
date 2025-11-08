@@ -5,8 +5,8 @@ use crate::models::product::Product;
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CartProduct {
 	#[serde(flatten)]	// makes it look like extended type in TypeScript
-	product: Product,
-	quantity: i32
+	pub product: Product,
+	pub quantity: i32
 }
 
 impl CartProduct {
