@@ -1,8 +1,10 @@
 import { Product } from "@/utils/types";
 
-const API_URL = process.env.API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const getProducts = async (): Promise<Product[]> => {
+  console.log("PRODUCT API URL", API_URL);
+
   const response = await fetch(`${API_URL}/api/products`);
 
   if (!response.ok) {

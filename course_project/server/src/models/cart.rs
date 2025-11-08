@@ -36,4 +36,8 @@ impl Cart {
 			total: 0.0
 		}
 	}
+
+	pub fn set_total(&mut self, total: f64) {
+		self.total = total
+	}
 }

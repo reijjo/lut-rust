@@ -3,6 +3,7 @@ use axum::{
   Router,
 };
 use std::sync::{Arc, Mutex};
+use tower_http::cors::{CorsLayer, Any};
 
 use crate::routes;
 use crate::middleware::logger::log_middleware;
@@ -24,6 +25,11 @@ pub fn create_app() -> Router {
 
 	let cart = Arc::new(Mutex::new(Cart::new()));
 
+	let cors = CorsLayer::new()
+		.allow_origin(Any)
+		.allow_methods(Any)
+		.allow_headers(Any);
+
 	let state = AppState {
 		http_client,
 		cart
@@ -32,6 +38,7 @@ pub fn create_app() -> Router {
 
   Router::new()
     .merge(routes::init_routes())
+		.layer(cors)
     .layer(middleware::from_fn(log_middleware))
 		.with_state(state)
 }
