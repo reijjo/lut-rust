@@ -8,6 +8,11 @@ button {
   place-items: center;
   width: 100%;
   height: 100%;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .btn-cta {
@@ -27,5 +32,9 @@ button {
 
   &:hover {
     border-color: black;
+
+    &:disabled {
+      border-color: rgba(0, 0, 0, 0.25);
+    }
   }
 }
