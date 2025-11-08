@@ -7,7 +7,9 @@ import NavCart from "./NavCart";
 import Button from "@/components/ui/button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { getCart } from "@/lib/api/cartApi";
+import { Loading } from "@/components/ui/Loading";
 
 const navLinks = [
   {
@@ -58,6 +60,7 @@ export const NavLinks = ({ setMobileOpen }: NavLinksProps) => {
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const cart = getCart();
 
   return (
     <nav>
@@ -77,7 +80,9 @@ export default function Navbar() {
         >
           <FontAwesomeIcon icon={mobileOpen ? faClose : faBars} />
         </Button>
-        <NavCart />
+        <Suspense fallback={<Loading text="€" />}>
+          <NavCart cart={cart} />
+        </Suspense>
       </div>
       {mobileOpen && (
         <div className="mobile-menu" id="mobile-navigation">
