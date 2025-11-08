@@ -20,7 +20,7 @@ export default function Product({ product }: ProductProps) {
   const [add, setAdd] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
-  const addProductToCart = () => {
+  const addProductToCart = async () => {
     const product: CartProduct = {
       ...data,
       quantity,
@@ -29,7 +29,8 @@ export default function Product({ product }: ProductProps) {
     setAdd(true);
 
     try {
-      addToCart(product);
+      const response = await addToCart(product);
+      console.log("response", response);
     } catch (err) {
       console.log(err);
     } finally {
@@ -40,7 +41,6 @@ export default function Product({ product }: ProductProps) {
   const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    // Allow empty string temporarily so user can clear and type
     if (value === "") {
       setQuantity(1);
       return;
@@ -48,7 +48,6 @@ export default function Product({ product }: ProductProps) {
 
     const parsedValue = parseInt(value, 10);
 
-    // Only update if it's a valid number >= 1
     if (!Number.isNaN(parsedValue) && parsedValue >= 1) {
       setQuantity(parsedValue);
     }

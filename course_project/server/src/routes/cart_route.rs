@@ -56,7 +56,7 @@ async fn add_to_cart(
 	// Adding the product to cart is done later
 	let cart = match state.cart.lock() {
 		Ok(cart) => {
-			println!("product title {} x {}", cart_product.product.title, cart_product.quantity);
+			tracing::info!("Adding product to cart: {} x {}", title, quantity);
 			cart
 		},
 		Err(e) => {
