@@ -20,6 +20,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "LUT - Course Project",
   description: "Lut university course project",
+  icons: {
+    icon: "/images/store.png",
+  },
 };
 
 export default function RootLayout({

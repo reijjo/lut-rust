@@ -38,3 +38,11 @@ button {
     }
   }
 }
+
+.btn-delete {
+  background-color: rgb(192, 57, 43);
+  color: white;
+  &:hover {
+    background-color: rgba(192, 57, 43, 0.85);
+  }
+}
