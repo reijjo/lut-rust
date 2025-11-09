@@ -1,12 +1,16 @@
 import { getCart } from "@/lib/api/cartApi";
+import CartList from "./_components/CartList";
+import { Suspense } from "react";
+import { Loading } from "@/components/ui/Loading";
 
-export default async function Cart() {
-  const cart = await getCart();
+export default function Cart() {
+  const cart = getCart();
 
-  console.log("cart", cart);
   return (
     <main>
-      <h1>Cart</h1>
+      <Suspense fallback={<Loading text="Loading cart..." />}>
+        <CartList cart={cart} />
+      </Suspense>
     </main>
   );
 }

@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
 import { Suspense, useState } from "react";
 import { Loading } from "@/components/ui/Loading";
+import Image from "next/image";
 
 const navLinks = [
   {
@@ -64,7 +65,7 @@ export default function Navbar() {
     <nav>
       <div className="nav-content wrapper">
         <Link href="/" className="nav-logo">
-          Logo
+          <Image src="/images/store.png" alt="logo" width={40} height={40} />
         </Link>
         <NavLinks setMobileOpen={setMobileOpen} />
         <Button

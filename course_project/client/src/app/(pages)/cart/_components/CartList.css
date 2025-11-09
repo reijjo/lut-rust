@@ -1,0 +1,17 @@
+.cart-total {
+  display: flex;
+  padding-block: 1rem;
+  gap: 2rem;
+  align-items: center;
+  justify-content: flex-end;
+
+  & p {
+    font-weight: 500;
+    font-size: 1.125rem;
+  }
+
+  & > button {
+    width: max-content;
+    padding: 0.5rem 1rem;
+  }
+}
