@@ -38,7 +38,8 @@ async fn get_cart(
 
 // POST cart
 async fn add_to_cart(
-	State(state): State<AppState>, Json(cart_product): Json<CartProduct>
+	State(state): State<AppState>,
+	Json(cart_product): Json<CartProduct>
 ) -> Result<Json<Cart>, (StatusCode, Json<serde_json::Value>)> {
 	let CartProduct { product, quantity } = &cart_product;
 	let Product { id, title, price, description, category, image } = product;
@@ -48,27 +49,41 @@ async fn add_to_cart(
     return Err((
       StatusCode::BAD_REQUEST,
       Json(serde_json::json!({
-        "error": "All product fields are required"
+        "error": "Invalid product data: all fields must be valid and non-empty"
       }))
     ));
   }
 
-	// Adding the product to cart is done later
-	let cart = match state.cart.lock() {
-		Ok(cart) => {
-			tracing::info!("Adding product to cart: {} x {}", title, quantity);
-			cart
-		},
+	// Acquire MUTABLE lock on cart (blocks other threads from reading/writing)
+	// All operations below are thread-safe while lock is held
+	let mut cart = match state.cart.lock() {
+		Ok(cart) => cart,
 		Err(e) => {
-			tracing::error!("Failed to add item to cart: {}", e);
-
+			// Log detailed error for debugging (includes PoisonError details)
+			tracing::error!("Cart mutex poisoned while adding item: {}", e);
 			return Err((
 				StatusCode::INTERNAL_SERVER_ERROR,
-				Json(json!({ "error": "Failed to add item" }))
+				// Generic message to client (don't expose internal details)
+				Json(json!({ "error": "Unable to add item to cart" }))
 			));
 		}
 	};
 
+	// Check if product already exists in cart
+	if let Some(existing_product) = cart.products
+		.iter_mut()
+		.find(|p| p.product.id == *id) {
+			// Product exists: increment quantity
+			existing_product.quantity += quantity;
+	} else {
+		// Product doesn't exist: add new item to cart
+		cart.products.push(cart_product);
+	}
+
+	// Recalculate total price for all items
+	cart.total = cart.products.iter()
+		.map(|p| p.product.price * p.quantity as f64)
+		.sum();
 
 	Ok(Json(cart.clone()))
 }

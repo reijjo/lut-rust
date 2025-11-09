@@ -9,6 +9,8 @@ import Button from "@/components/ui/button/Button";
 import { addToCart } from "@/lib/api/cartApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
+import { useCartTotal } from "@/lib/stores/cartStore";
 
 type ProductProps = {
   product: Promise<ProductType>;
@@ -16,9 +18,11 @@ type ProductProps = {
 
 export default function Product({ product }: ProductProps) {
   const data = use(product);
-
   const [add, setAdd] = useState(false);
   const [quantity, setQuantity] = useState(1);
+
+  const router = useRouter();
+  const updateTotal = useCartTotal((state) => state.updateTotal);
 
   const addProductToCart = async () => {
     const product: CartProduct = {
@@ -29,8 +33,9 @@ export default function Product({ product }: ProductProps) {
     setAdd(true);
 
     try {
-      const response = await addToCart(product);
-      console.log("response", response);
+      const res = await addToCart(product);
+      updateTotal(res.total);
+      router.push("/cart");
     } catch (err) {
       console.log(err);
     } finally {

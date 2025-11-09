@@ -11,7 +11,7 @@ export default function Jewelery() {
   return (
     <main>
       <Suspense fallback={<Loading text="Loading jewelery..." />}>
-        <ProductList products={jeweleryProducts} header="Jewelery" />
+        <ProductList products={jeweleryProducts} header="Jewelry" />
       </Suspense>
     </main>
   );
