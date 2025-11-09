@@ -17,13 +17,19 @@ export default function CartList({ cart }: CartListProps) {
 
   return (
     <section className="cart-list wrapper">
-      {fullCart.products.map((product) => (
-        <CartItem key={product.id} product={product} />
-      ))}
-      <div className="cart-total">
-        <p>Total: {formatPrice(fullCart.total)}</p>
-        <Button className="btn-cta">Buy items!</Button>
-      </div>
+      {fullCart.products.length === 0 ? (
+        <h3 className="empty-cart">Your cart is empty.</h3>
+      ) : (
+        fullCart.products.map((product) => (
+          <CartItem key={product.id} product={product} />
+        ))
+      )}
+      {fullCart.products.length > 0 && (
+        <div className="cart-total">
+          <p>Total: {formatPrice(fullCart.total)}</p>
+          <Button className="btn-cta">Buy items!</Button>
+        </div>
+      )}
     </section>
   );
 }
