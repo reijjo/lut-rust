@@ -54,11 +54,8 @@ async fn add_to_cart(
   }
 
 	// Adding the product to cart is done later
-	let cart = match state.cart.lock() {
-		Ok(cart) => {
-			tracing::info!("Adding product to cart: {} x {}", title, quantity);
-			cart
-		},
+	let mut cart = match state.cart.lock() {
+		Ok(cart) => cart,
 		Err(e) => {
 			tracing::error!("Failed to add item to cart: {}", e);
 
@@ -68,6 +65,19 @@ async fn add_to_cart(
 			));
 		}
 	};
+
+	// If there is the product alraedy just update the quantity
+	if let Some(existing_product) = cart.products
+		.iter_mut()
+		.find(|p| p.product.id == *id) {
+			existing_product.quantity += quantity;
+	} else {
+		cart.products.push(cart_product);
+	}
+
+	cart.total = cart.products.iter()
+		.map(|p| p.product.price * p.quantity as f64)
+		.sum();
 
 
 	Ok(Json(cart.clone()))
