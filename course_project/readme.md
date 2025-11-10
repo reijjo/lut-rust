@@ -1,36 +1,75 @@
-# LUT University - Course Project Rust Programming 2025-26
+# E-Commerce Backend (Rust + Axum)
 
-Backend Application for e-commerce site done with `Axum` framework
+A simple e-commerce backend built with `Rust` using the `Axum` framework.
 
-- Frontend done with `NextJS`
+Frontend is implemented with `Next.js` and `Zustand` for state management.
+
+This project was created as part of the LUT University – Rust Programming 2025–26 course.
 
 ## How to use
+
+<!-- ### Live
+Try it here: <http://something.vercel.com>
+- Frontend deployed with `Vercel`
+- Backend deployed with `Render` -->
+
+### Run Locally
+
+#### 1. Rename environment files
+
+In both the `client` and `server` folders, rename `.env.example` → `.env`.
+
+#### 2. Start the frontend
+
+```bash
+cd client
+npm run build-dev
+```
+
+Runs at: <http://localhost:3000/>
+
+#### 3. Start the backend
+
+```bash
+cd server
+cargo run
+```
+
+Runs at: <http://localhost:3001/>
 
 ## Technologies
 
 ### Backend
 
-`Rust` backend with `Axum` framework
+- `Rust` + `Axum` for HTTP server
+- `Arc<Mutex<Cart>>` simulate a database
 
 ### Frontend
 
-Frontend is done with `NextJS`
+- `NextJS` for UI
+- `Zustand` for state management
+- `Fake Store API` as data source → <https://fakestoreapi.com/>
 
-#### API
+## API Routes
 
-Using <https://fakestoreapi.com/> for the products
+### Products
 
-##### Routes
+| Method | Route           | Description          |
+| :----- | :-------------- | :------------------- |
+| `GET`  | `/products`     | Fetch all products   |
+| `GET`  | `/products/:id` | Fetch single product |
 
-Product route:
+### Cart
 
-- `GET /products` for fetching all the products
-- `GET /products/:id` for fetching single product
+| Method   | Route       | Description           |
+| :------- | :---------- | :-------------------- |
+| `GET`    | `/cart`     | Get current cart      |
+| `POST`   | `/cart`     | Add item to cart      |
+| `DELETE` | `/cart`     | Clear entire cart     |
+| `PATCH`  | `/cart/:id` | Update item quantity  |
+| `DELETE` | `/cart/:id` | Remove item from cart |
 
-Cart route:
+## What I learned
 
-- `GET /cart` for the cart
-- `POST /cart` adding item to cart
-- `DELETE /cart` clearing the cart
-- `PATCH /cart/:id` updating item in the cart
-- `DELETE /cart/:id` deleting item in the cart
+- Setting up a **Rust backend** with the **Axum** framework
+- Handling **shared mutable state** safely with `Arc<Mutex<>>`
