@@ -44,7 +44,6 @@ export const updateCartItem = async (
   id: number,
   quantity: number
 ): Promise<Cart> => {
-  console.log("id", id, "quantity", quantity);
   try {
     const response = await fetch(`${API_URL}/api/cart/${id}`, {
       method: "PATCH",

@@ -99,6 +99,13 @@ async fn update_cart_item(
 ) -> Result<Json<Cart>, (StatusCode, Json<serde_json::Value>)> {
 	let quantity = item_quantity.quantity;
 
+	if quantity <= 0 {
+		return Err((
+			StatusCode::BAD_REQUEST,
+			Json(json!({ "error": "Quantity must be greater than 0" }))
+		));
+	}
+
 	let mut cart = match state.cart.lock() {
 		Ok(cart) => cart,
 		Err(e) => {
