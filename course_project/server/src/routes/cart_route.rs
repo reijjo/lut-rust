@@ -14,6 +14,7 @@ pub fn cart_routes() -> Router<AppState> {
 	Router::new()
 		.route("/", get(get_cart))
 		.route("/", post(add_to_cart))
+		.route("/", delete(clear_cart))
 		.route("/{id}", patch(update_cart_item))
 		.route("/{id}", delete(delete_cart_item))
 }
@@ -174,4 +175,24 @@ async fn delete_cart_item(
 		.max(0.0);
 
 	Ok(Json(cart.clone()))
+}
+
+async fn clear_cart(
+  State(state): State<AppState>
+) -> Result<Json<Cart>, (StatusCode, Json<serde_json::Value>)> {
+  let mut cart = match state.cart.lock() {
+    Ok(cart) => cart,
+    Err(e) => {
+      tracing::error!("Cart mutex poisoned while clearing cart: {}", e);
+      return Err((
+        StatusCode::INTERNAL_SERVER_ERROR,
+        Json(json!({ "error": "Unable to clear cart" }))
+      ));
+    }
+  };
+
+  cart.products.clear();
+  cart.total = 0.0;
+
+  Ok(Json(cart.clone()))
 }

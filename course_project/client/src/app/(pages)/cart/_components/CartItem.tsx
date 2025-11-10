@@ -30,9 +30,13 @@ export default function CartItem({ product }: CartItemProps) {
   };
 
   const removeItem = async () => {
-    const res = await deleteCartItem(product.id);
-    updateTotal(res.total);
-    router.refresh();
+    try {
+      const res = await deleteCartItem(product.id);
+      updateTotal(res.total);
+      router.refresh();
+    } catch (error) {
+      console.error("Error deleting cart item: ", error);
+    }
   };
 
   return (

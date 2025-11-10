@@ -11,7 +11,6 @@ type ProductListProps = {
 export default function ProductList({ products, header }: ProductListProps) {
   const allProducts = use(products);
 
-  console.log("allProducts", allProducts);
   return (
     <section className="wrapper product-list-section">
       <h2>{header}</h2>
