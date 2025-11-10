@@ -6,20 +6,12 @@ use crate::models::product::Product;
 pub struct CartProduct {
 	#[serde(flatten)]	// makes it look like extended type in TypeScript
 	pub product: Product,
-	pub quantity: i32
+	pub quantity: u32
 }
 
 impl CartProduct {
-	pub fn new(product: Product, quantity: i32) -> Self {
-		Self { product, quantity }
-	}
-
-	pub fn set_quantity(&mut self, quantity: i32) {
+	pub fn set_quantity(&mut self, quantity: u32) {
 		self.quantity = quantity
-	}
-
-	pub fn subtotal(&self) -> f64 {
-		self.product.price * self.quantity as f64
 	}
 }
 
@@ -36,8 +28,9 @@ impl Cart {
 			total: 0.0
 		}
 	}
+}
 
-	pub fn set_total(&mut self, total: f64) {
-		self.total = total
-	}
+#[derive(Deserialize, Debug)]
+pub struct UpdateQuantity {
+	pub quantity: u32
 }
