@@ -20,3 +20,28 @@
   text-align: center;
   padding-block: 2rem;
 }
+
+.bought {
+  width: 90%;
+  max-width: 500px;
+  text-wrap: balance;
+  text-align: center;
+  margin-top: 10rem;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow-m);
+
+  &:popover-open {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-self: center;
+    align-items: center;
+  }
+
+  & > button {
+    width: max-content;
+    padding: 0.25rem 1rem;
+  }
+}

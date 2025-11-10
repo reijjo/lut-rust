@@ -82,3 +82,21 @@ export const deleteCartItem = async (id: number): Promise<Cart> => {
     throw new Error("Unknown error deleting cart item");
   }
 };
+
+export const clearCart = async (): Promise<Cart> => {
+  try {
+    const response = await fetch(`${API_URL}/api/cart`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to clear cart");
+    }
+
+    const cart: Cart = await response.json();
+    return cart;
+  } catch (error) {
+    console.error("Error clearing cart: ", error);
+    throw new Error("Unknown error clearing cart");
+  }
+};
