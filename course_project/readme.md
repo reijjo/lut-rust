@@ -20,12 +20,17 @@ Frontend is done with `NextJS`
 
 Using <https://fakestoreapi.com/> for the products
 
-- Routes
+##### Routes
 
-  - `GET /products` for fetching all the products
-  - `GET /products/:id` for fetching single product
-  - `GET /cart` for the cart
-  - `POST /cart` adding item to cart
-  - `DELETE /cart` clearing the cart
-  - `PATCH /cart/:id` updating item in the cart
-  - `DELETE /cart/:id` deleting item in the cart
+Product route:
+
+- `GET /products` for fetching all the products
+- `GET /products/:id` for fetching single product
+
+Cart route:
+
+- `GET /cart` for the cart
+- `POST /cart` adding item to cart
+- `DELETE /cart` clearing the cart
+- `PATCH /cart/:id` updating item in the cart
+- `DELETE /cart/:id` deleting item in the cart
