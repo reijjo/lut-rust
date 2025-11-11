@@ -21,10 +21,13 @@ What was made, what was used, what you learned.
 
 Features done
 List features here
-• Feature 1
-• Feature 2
-• etc.
+
+- Feature 1
+- Feature 2
+- etc.
+
 Maximum points listed below features. The ones listed in the course project page give 5 points each, maximum points from the project is 30. 10 points from features not listed in the course page are required from additional features made by the students. Suggestions from each features related to the project can be found from the course project page.
+
 Link to video
 Link to a showcasing video here.
 
@@ -40,22 +43,3 @@ The submitted project must follow the given template and include all required fe
     Inside the folder, there must be a report in PDF format explaining the implementation and functionality of the project.
 
 ---
-
-Fakestore
-
-Chosen project - "Backend Application"
-
-- nextjs frontend
-- rust axum backend
-- fakestoreapi
-- json file for backend
-  learned rust backend in real project
-
-Features done:
-
-- GET /products
-- POST /cart
-- GET /cart
-- PATCH /cart/:id
-- DELETE /cart/:id
-- somethingsomehing

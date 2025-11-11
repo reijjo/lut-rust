@@ -6,12 +6,13 @@ Frontend is implemented with `Next.js` and `Zustand` for state management.
 
 This project was created as part of the LUT University – Rust Programming 2025–26 course.
 
-## How to use
+<img width="1408" height="758" alt="Screenshot 2025-11-10 at 18 03 52" src="https://github.com/user-attachments/assets/a5330030-8363-4cb7-9755-a9d2f92eede1" />
 
-<!-- ### Live
-Try it here: <http://something.vercel.com>
-- Frontend deployed with `Vercel`
-- Backend deployed with `Render` -->
+<img width="1408" height="777" alt="Screenshot 2025-11-10 at 18 04 38" src="https://github.com/user-attachments/assets/288f8542-8a64-49d6-9517-11aaef73a487" />
+
+<img width="304" height="661" alt="Screenshot 2025-11-10 at 18 10 55" src="https://github.com/user-attachments/assets/fa8ea7d9-99b6-4857-95bb-5513e6385a83" />
+
+## How to use
 
 ### Run Locally
 
